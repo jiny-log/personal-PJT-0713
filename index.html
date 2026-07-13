@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그렇게 가족이 된다</title>
+    <!-- 폰트 연동: 노토 세리프(명조) & 노토 산스(고딕) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@200;300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 디자인 시스템 & 변수 정의 --- */
+        :root {
+            --bg-warm-gray: #F2F0EB; /* 조금 더 차분하고 따뜻해진 종이 질감 톤 */
+            --main-deep-navy: #1A222D; /* 먹색에 가까운 깊은 네이비 */
+            --point-warm-sand: #B59975; /* 빛바랜 아날로그 샌드 베이지 */
+            --text-dark: #2B343F;
+            --text-light: #F5F4F0;
+            --font-serif: 'Noto Serif KR', serif;
+            --font-sans: 'Noto Sans KR', sans-serif;
+        }
+
+        /* --- 기본 스타일 리셋 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-warm-gray);
+            color: var(--text-dark);
+            line-height: 2; /* 행간을 조금 더 넓혀 가독성과 여백 확보 */
+            overflow-x: hidden;
+            word-break: keep-all;
+            position: relative;
+        }
+
+        /* 아날로그 필름 그레인(노이즈) 질감 효과 추가 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-warm-gray);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--point-warm-sand);
+        }
+
+        /* 공통 스타일 */
+        .section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 24px;
+        }
+
+        .serif-title {
+            font-family: var(--font-serif);
+            font-weight: 400; /* 너무 두꺼운 느낌을 빼고 수려하게 변경 */
+            letter-spacing: -0.04em;
+        }
+
+        .serif-copy {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        /* --- 1구역: 인트로 (고장 나지 않도록 고정 및 보완) --- */
+        #intro {
+            height: 100vh; /* 레이아웃 왜곡을 막기 위해 고정 브라우저 높이로 설정 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(rgba(26, 34, 45, 0.4), rgba(26, 34, 45, 0.85)), 
+                        url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131031_80%2F1383208780381zYEuC_JPEG%2Fmovie_image.jpg') center/cover no-repeat;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .intro-container {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease;
+            will-change: transform, opacity; /* 부드러운 스크롤 최적화 */
+        }
+
+        .intro-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .intro-tag {
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.5em;
+            color: var(--point-warm-sand);
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+        }
+
+        .intro-main-copy {
+            font-size: 2.8rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .intro-sub-copy {
+            font-size: 1rem;
+            color: #A2B1C3;
+            margin-top: 2.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* --- 2구역: 갈등의 서막 (The Dilemma) --- */
+        #dilemma {
+            background-color: var(--bg-warm-gray);
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .dilemma-wrap {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .dilemma-wrap.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dilemma-call {
+            font-size: 1.15rem;
+            color: var(--main-deep-navy);
+            letter-spacing: 0.15em;
+            margin-bottom: 4rem;
+        }
+
+        .dilemma-call::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 60px;
+            background-color: var(--point-warm-sand);
+            margin: 2.5rem auto 0;
+        }
+
+        .dilemma-question {
+            font-size: 1.5rem;
+            line-height: 2.2;
+            color: var(--text-dark);
+            font-weight: 300;
+        }
+
+        /* --- 3구역: 대비와 갈등 (The Contrast) --- */
+        #contrast {
+            padding: 0;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .split-screen {
+            width: 50%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10% 8%;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .split-left {
+            background-image: linear-gradient(rgba(26, 34, 45, 0.3), rgba(26, 34, 45, 0.92)), 
+                            url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131031_82%2F1383203753533lA9Ak_JPEG%2Fmovie_image.jpg');
+            color: var(--text-light);
+        }
+
+        .split-right {
+            background-image: linear-gradient(rgba(242, 240, 235, 0.2), rgba(242, 240, 235, 0.94)), 
+                            url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131031_222%2F1383208826422zCcCd_JPEG%2Fmovie_image.jpg');
+            color: var(--text-dark);
+        }
+
+        .family-tag {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .split-left .family-tag { color: var(--point-warm-sand); }
+        .split-right .family-tag { color: #9A8061; }
+
+        .family-name {
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            z-index: 1;
+        }
+
+        .family-desc {
+            font-size: 0.95rem;
+            line-height: 2;
+            opacity: 0.85;
+            max-width: 420px;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        /* --- 4구역: 성찰과 성장 (The Realization) --- */
+        #realization {
+            background: linear-gradient(rgba(20, 25, 33, 0.75), rgba(20, 25, 33, 0.85)), 
+                        url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131205_275%2F1386209407685Bqu7r_JPEG%2Fmovie_image.jpg') center/cover no-repeat fixed; 
+            color: var(--text-light);
+            padding: 160px 24px;
+        }
+
+        .viewfinder-frame {
+            position: relative;
+            max-width: 800px;
+            width: 100%;
+            padding: 60px 20px;
+        }
+
+        .corner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 1px solid rgba(181, 153, 117, 0.4);
+        }
+        .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+        .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+        .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+        .realization-content {
+            text-align: center;
+        }
+
+        .section-tag {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--point-warm-sand);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .realization-content .main-title {
+            font-size: 2rem;
+            margin-bottom: 5rem;
+            color: #F5F4F0;
+        }
+
+        .narrative-wrap {
+            margin: 4rem 0;
+        }
+
+        .fade-text {
+            font-size: 1.6rem;
+            color: #8A99AD;
+            font-weight: 300;
+        }
+
+        .center-focus-ring {
+            margin: 4rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .focus-circle {
+            width: 48px;
+            height: 48px;
+            border: 1px dashed rgba(181, 153, 117, 0.4);
+            border-radius: 50%;
+            position: relative;
+        }
+        .focus-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 2px; height: 2px;
+            background-color: var(--point-warm-sand);
+            transform: translate(-50%, -50%);
+        }
+
+        .highlight-text {
+            font-size: 1.6rem;
+            color: var(--point-warm-sand);
+            margin-bottom: 2.5rem;
+        }
+
+        .sub-description {
+            font-size: 1.05rem;
+            line-height: 2.2;
+            color: #C5D1DE;
+            font-weight: 300;
+        }
+
+        .realization-content .quote-line {
+            width: 30px;
+            height: 1px;
+            background-color: rgba(181, 153, 117, 0.3);
+            margin: 5rem auto 2.5rem;
+        }
+
+        .realization-content .conclusion {
+            font-size: 1.3rem;
+            color: #F5F4F0;
+            letter-spacing: -0.02em;
+        }
+
+        /* --- 5구역: 아카이브 & 에필로그 (The Archive) --- */
+        #archive {
+            background-color: var(--bg-warm-gray);
+            align-items: stretch;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 140px 24px;
+        }
+
+        .archive-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 5rem;
+            color: var(--main-deep-navy);
+            letter-spacing: 0.05em;
+        }
+
+        .archive-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+        }
+
+        .interview-box {
+            border-left: 1px solid var(--point-warm-sand);
+            padding-left: 32px;
+        }
+
+        .interview-quote {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #3A4655;
+        }
+
+        .interview-author {
+            font-size: 0.85rem;
+            color: #7E8E9F;
+            margin-top: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            filter: grayscale(10%);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--main-deep-navy);
+        }
+
+        .review-section {
+            padding-top: 10px;
+        }
+
+        .review-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--main-deep-navy);
+            font-weight: 500;
+        }
+
+        .review-list {
+            list-style: none;
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .review-item {
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(26, 34, 45, 0.08);
+            font-family: var(--font-serif);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #4A5565;
+        }
+
+        .review-item-date {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            color: #9AA6B5;
+            margin-top: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- 푸터 (Footer) --- */
+        footer {
+            background-color: var(--main-deep-navy);
+            color: #7E8E9F;
+            padding: 80px 24px;
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            line-height: 2;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+        }
+
+        /* --- 백그라운드 BGM 컨트롤러 스타일 --- */
+        .audio-control-btn {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+            background-color: rgba(242, 240, 235, 0.7);
+            color: var(--main-deep-navy);
+            padding: 8px 16px;
+            border-radius: 0;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(26, 34, 45, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.4s ease;
+        }
+
+        .audio-control-btn:hover {
+            background-color: var(--main-deep-navy);
+            color: var(--text-light);
+        }
+
+        .audio-icon {
+            font-size: 0.8rem;
+        }
+
+        .audio-control-btn.muted {
+            color: #9AA6B5;
+            background-color: rgba(242, 240, 235, 0.4);
+        }
+
+        .audio-control-btn.playing .audio-icon {
+            animation: wave 2s infinite ease-in-out;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); opacity: 0.7; }
+        }
+
+        /* --- 반응형 레이아웃 --- */
+        @media (max-width: 768px) {
+            .intro-main-copy { font-size: 2rem; }
+            #contrast { flex-direction: column; }
+            .split-screen { width: 100%; min-height: 60vh; padding: 80px 32px; }
+            .archive-grid { grid-template-columns: 1fr; gap: 60px; }
+            .viewfinder-frame { padding: 40px 0; }
+            .realization-content .main-title { font-size: 1.6rem; }
+            .fade-text, .highlight-text { font-size: 1.3rem; }
+            .audio-control-btn { top: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 백그라운드 오디오 컨트롤러 -->
+    <div id="audioControl" class="audio-control-btn">
+        <span class="audio-icon">■</span>
+        <span id="audioStatusText" class="audio-text">SOUND ON</span>
+    </div>
+
+    <!-- 유튜브 플레이어 히든 영역 -->
+    <div id="youtubeAudioPlayer" style="display:none;"></div>
+
+    <!-- 1구역: 인트로 -->
+    <section id="intro" class="section">
+        <div class="intro-container" id="introContainer">
+            <p class="intro-tag">Digital Archive Booklet</p>
+            <h1 class="serif-title intro-main-copy">
+                닮지 않아도 스며드는 것,<br>그렇게 가족이 된다.
+            </h1>
+            <p class="serif-copy intro-sub-copy">그렇게 아버지가 된다 (Like Father, Like Son, 2013)</p>
+        </div>
+    </section>
+
+    <!-- 2구역: 갈등의 서막 -->
+    <section id="dilemma" class="section">
+        <div class="dilemma-wrap" id="dilemmaWrap">
+            <p class="serif-copy dilemma-call">어느 날 걸려 온 한 통의 전화.</p>
+            <p class="serif-copy dilemma-question">
+                6년간 키워온 내 아이가 다른 사람의 아이라는 청천벽력 같은 사실.<br><br>
+                기른 정과 낳은 정,<br>
+                당신이라면 어떤 선택을 하겠습니까?
+            </p>
+        </div>
+    </section>
+
+    <!-- 3구역: 대비와 갈등 -->
+    <section id="contrast" class="section">
+        <div class="split-screen split-left">
+            <p class="family-tag">The Elite Family</p>
+            <h2 class="serif-title family-name">료타의 집</h2>
+            <p class="serif-copy family-desc">
+                직선적이고 정돈된 공간, 성공을 지향하는 차가운 딥 네이비 톤.<br>
+                엄격한 양육 방식과 규칙 속에서 피보다 완벽한 조건을 증명하려 합니다.
+            </p>
+        </div>
+        <div class="split-screen split-right">
+            <p class="family-tag">The Warm Family</p>
+            <h2 class="serif-title family-name">사이키의 집</h2>
+            <p class="serif-copy family-desc">
+                곡선적이고 무질서하지만 따스한 온기가 배어나는 웜 샌드 톤.<br>
+                부족한 형편일지라도 온몸으로 부딪히며 아이와 함께 시간을 쌓아갑니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- 4구역: 성찰과 성장 -->
+    <section id="realization" class="section">
+        <div class="viewfinder-frame">
+            <div class="corner tl"></div><div class="corner tr"></div>
+            <div class="corner bl"></div><div class="corner br"></div>
+            
+            <div class="realization-content">
+                <p class="section-tag">The Realization</p>
+                <h2 class="serif-title main-title">아이의 시선, 아버지가 되는 시간</h2>
+                
+                <div class="narrative-wrap">
+                    <p class="serif-copy fade-text">"그 카메라 케이타에게 줄게."</p>
+                    
+                    <div class="center-focus-ring">
+                        <div class="focus-circle"></div>
+                    </div>
+
+                    <p class="serif-copy highlight-text">
+                        아이가 떠난 자리에 남겨진 카메라에는...
+                    </p>
+                    
+                    <p class="serif-copy sub-description">
+                        아이가 남겨둔 서툰 기록,<br>
+                        아버지는 비로소 아이의 시간을 보았습니다.
+                    </p>
+                </div>
+
+                <div class="quote-line"></div>
+                <p class="serif-copy conclusion">아버지는 태어나는 것이 아니라, 그렇게 되어가는 것입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5구역: 아카이브 & 에필로그 -->
+    <section id="archive" class="section">
+        <h2 class="serif-title archive-title">The Archive</h2>
+        
+        <div class="archive-grid">
+            <div class="archive-left">
+                <div class="interview-box" style="margin-bottom: 56px;">
+                    <p class="serif-copy interview-quote">
+                        "아버지는 단지 혈연관계만을 뜻하지 않는다. 아이와 함께 보낸 시간, 그리고 그 속에서 나누었던 시선들이 한 인간을 아버지로 성장시킨다."
+                    </p>
+                    <p class="interview-author">— 고레에다 히로카즈 감독 인터뷰 중</p>
+                </div>
+                
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/fuY2lyCmW-E" 
+                        title="그렇게 아버지가 된다 공식 예고편" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                     </iframe>
+                </div>
+            </div>
+
+            <div class="archive-right">
+                <div class="review-section">
+                    <h3 class="serif-title">시네필의 성찰</h3>
+                    <p style="font-size: 0.85rem; color: #7E8E9F; margin-bottom: 2rem;">영화가 남긴 깊은 울림에 대한 기록입니다.</p>
+                    
+                    <ul class="review-list" id="reviewList">
+                        <li class="review-item">
+                            아버지는 시간이다. 카메라의 크기는 중요하지않다.
+                            <span class="review-item-date">평점 ★10 | 네이버 관람평</span>
+                        </li>
+                        <li class="review-item">
+                            결과를 단정짓고 싶지 않아요. 그들의 삶은 계속 되기 때문에.
+                            <span class="review-item-date">평점 ★9 | 네이버 관람평</span>
+                        </li>
+                        <li class="review-item">
+                            우리는 그렇게 고레에다 히로카즈 감독의 팬이 된다.
+                            <span class="review-item-date">평점 ★9 | 네이버 관람평</span>
+                        </li>
+                        <li class="review-item">
+                            제목이 모든 것을 말해준다. 처음부터 주어지는 것은 없다. 그것을 얻고 느끼기까지의 여정을 담담하게 그려낸다.
+                            <span class="review-item-date">평점 ★8 | 네이버 관람평</span>
+                        </li>
+                    </ul>
+
+                    <div style="margin-top: 32px; border-top: 1px solid rgba(26, 34, 45, 0.08); padding-top: 20px;">
+                        <a href="https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&mra=bkEw&pkid=68&os=1836765&qvt=0&query=%EC%98%81%ED%99%94%20%EA%B7%B8%EB%A0%87%EA%B2%8C%20%EC%95%84%EB%B2%84%EC%A7%80%EA%B0%80%20%EB%90%9C%EB%8B%A4%20%EA%B4%80%EB%9E%8C%ED%8F%89" 
+                           target="_blank" 
+                           style="color: var(--main-deep-navy); text-decoration: none; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.05em;">
+                            네이버 실제 관람평 전체보기 →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <p class="serif-copy" style="color: var(--point-warm-sand); font-size: 1.05rem; margin-bottom: 20px;">"그렇게 아버지가 된다"</p>
+        <p>© 2026 Like Father, Like Son Online Archive. Designed for Cinephiles.</p>
+        <p style="font-size: 0.75rem; opacity: 0.5; margin-top: 8px;">본 페이지는 영화적 성찰을 위한 아카이브용 웹사이트 템플릿입니다.</p>
+    </footer>
+
+    <!-- 스크립트 -->
+    <script>
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        let bgmPlayer;
+        const videoId = 'b0fEJZ8JoU4';
+        let isMuted = false;
+        let hasStarted = false;
+
+        function onYouTubeIframeAPIReady() {
+            bgmPlayer = new YT.Player('youtubeAudioPlayer', {
+                height: '0', width: '0', videoId: videoId,
+                playerVars: {
+                    'autoplay': 1, 'loop': 1, 'playlist': videoId,
+                    'controls': 0, 'showinfo': 0, 'rel': 0, 'modestbranding': 1
+                },
+                events: { 'onReady': onPlayerReady }
+            });
+        }
+
+        function onPlayerReady(event) {
+            const audioControl = document.getElementById('audioControl');
+            const audioStatusText = document.getElementById('audioStatusText');
+            
+            bgmPlayer.setVolume(20); 
+
+            const startAudio = () => {
+                if (!hasStarted && bgmPlayer && typeof bgmPlayer.playVideo === 'function') {
+                    bgmPlayer.playVideo();
+                    audioControl.classList.add('playing');
+                    hasStarted = true;
+                    document.removeEventListener('click', startAudio);
+                    document.removeEventListener('touchstart', startAudio);
+                }
+            };
+
+            document.addEventListener('click', startAudio);
+            document.addEventListener('touchstart', startAudio);
+
+            audioControl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!hasStarted) {
+                    bgmPlayer.playVideo();
+                    audioControl.classList.add('playing');
+                    audioStatusText.innerText = "SOUND ON";
+                    hasStarted = true;
+                    return;
+                }
+                if (isMuted) {
+                    bgmPlayer.unMute();
+                    bgmPlayer.playVideo();
+                    audioControl.classList.remove('muted');
+                    audioControl.classList.add('playing');
+                    audioStatusText.innerText = "SOUND ON";
+                    isMuted = false;
+                } else {
+                    bgmPlayer.mute();
+                    audioControl.classList.add('muted');
+                    audioControl.classList.remove('playing');
+                    audioStatusText.innerText = "SOUND OFF";
+                    isMuted = true;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const introContainer = document.getElementById('introContainer');
+            
+            // 처음 로드되었을 때 타이틀 확실히 노출
+            setTimeout(() => {
+                if(introContainer) {
+                    introContainer.classList.add('visible');
+                }
+            }, 100);
+
+            // 오작동하기 쉬운 스크롤 계산 로직을 훨씬 안전하고 부드러운 방식으로 변경
+            window.addEventListener('scroll', () => {
+                if (!introContainer) return;
+                const scrollY = window.scrollY;
+                const introHeight = window.innerHeight;
+
+                if (scrollY <= introHeight) {
+                    const translateY = scrollY * 0.2; // 부드럽게 올라가는 연출 속도 제어
+                    const opacity = Math.max(0, 1 - (scrollY / (introHeight * 0.8))); // 사라지는 타이밍 보정
+                    
+                    introContainer.style.transform = `translateY(${translateY}px)`;
+                    introContainer.style.opacity = opacity;
+                }
+            }, { passive: true });
+
+            const dilemmaWrap = document.getElementById('dilemmaWrap');
+            if (dilemmaWrap) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            dilemmaWrap.classList.add('visible');
+                        }
+                    });
+                }, { root: null, threshold: 0.1 });
+                observer.observe(dilemmaWrap);
+            }
+        });
+    </script>
+</body>
+</html>
