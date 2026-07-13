@@ -90,7 +90,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(rgba(26, 34, 45, 0.4), rgba(26, 34, 45, 0.85)), 
+            background: linear-gradient(rgba(26, 34, 45, 0.411), rgba(26, 34, 45, 0.671)), 
                         url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131031_80%2F1383208780381zYEuC_JPEG%2Fmovie_image.jpg') center/cover no-repeat;
             color: var(--text-light);
             text-align: center;
@@ -233,7 +233,7 @@
 
         /* --- 4구역: 성찰과 성장 (The Realization) --- */
         #realization {
-            background: linear-gradient(rgba(20, 25, 33, 0.75), rgba(20, 25, 33, 0.85)), 
+            background: linear-gradient(rgba(20, 25, 33, 0.24), rgba(102, 102, 102, 0.486)), 
                         url('https://search.pstatic.net/common?quality=75&direct=true&src=https%3A%2F%2Fmovie-phinf.pstatic.net%2F20131205_275%2F1386209407685Bqu7r_JPEG%2Fmovie_image.jpg') center/cover no-repeat fixed; 
             color: var(--text-light);
             padding: 160px 24px;
@@ -243,6 +243,9 @@
             position: relative;
             max-width: 800px;
             width: 100%;
+            background-color: rgba(126, 126, 128, 0.164); /* 뒷 배경 사진이 은은하게 비치도록 */
+            backdrop-filter: blur(4px); /* 배경 사진을 미세하게 블러 처리하여 신비로운 분위기 연출 */
+            -webkit-backdrop-filter: blur(4px);
             padding: 60px 20px;
         }
 
@@ -538,15 +541,15 @@
             <p class="family-tag">The Elite Family</p>
             <h2 class="serif-title family-name">료타의 집</h2>
             <p class="serif-copy family-desc">
-                직선적이고 정돈된 공간, 성공을 지향하는 차가운 딥 네이비 톤.<br>
-                엄격한 양육 방식과 규칙 속에서 피보다 완벽한 조건을 증명하려 합니다.
+                도쿄 시내의 고급 아파트, <br>
+                성공한 건축가인 료타는 엄격한 양육 방식과 규칙 속에서 피보다 완벽한 조건을 증명하려 합니다.
             </p>
         </div>
         <div class="split-screen split-right">
             <p class="family-tag">The Warm Family</p>
             <h2 class="serif-title family-name">사이키의 집</h2>
             <p class="serif-copy family-desc">
-                곡선적이고 무질서하지만 따스한 온기가 배어나는 웜 샌드 톤.<br>
+                낙후된 군마현의 전파상으로 먹고사는 사이키.<br>
                 부족한 형편일지라도 온몸으로 부딪히며 아이와 함께 시간을 쌓아갑니다.
             </p>
         </div>
@@ -560,7 +563,7 @@
             
             <div class="realization-content">
                 <p class="section-tag">The Realization</p>
-                <h2 class="serif-title main-title">아이의 시선, 아버지가 되는 시간</h2>
+                <h2 class="serif-title main-title">아이의 시선, 아버지가 되는 순간</h2>
                 
                 <div class="narrative-wrap">
                     <p class="serif-copy fade-text">"그 카메라 케이타에게 줄게."</p>
