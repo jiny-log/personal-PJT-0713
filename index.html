@@ -429,6 +429,57 @@
             letter-spacing: 0.05em;
         }
 
+        /* --- OTT 링크 섹션 스타일 --- */
+        .ott-section {
+            background-color: #E6E3DC; /* 기존 배경보다 한 톤 다운된 차분한 베이지 */
+            padding: 60px 24px;
+            text-align: center;
+            border-top: 1px solid rgba(26, 34, 45, 0.05);
+        }
+
+        .ott-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: #7E8E9F;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .ott-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .ott-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 24px;
+            background-color: var(--bg-warm-gray);
+            color: var(--main-deep-navy);
+            text-decoration: none;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            border: 1px solid rgba(26, 34, 45, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* 마우스를 올렸을 때 은은하게 반응하는 효과 */
+        .ott-link:hover {
+            background-color: var(--main-deep-navy);
+            color: var(--text-light);
+            border-color: var(--main-deep-navy);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .ott-buttons { flex-direction: column; max-width: 280px; margin: 0 auto; }
+            .ott-link { justify-content: center; }
+        }
+
         /* --- 푸터 (Footer) --- */
         footer {
             background-color: var(--main-deep-navy);
@@ -699,6 +750,26 @@
             </div>
         </div>
     </section>
+
+    <!-- OTT 바로가기 섹션 -->
+    <section class="ott-section">
+        <p class="ott-title serif-copy">지금 바로 영화 감상하기</p>
+        <div class="ott-buttons">
+            <a href="https://www.netflix.com/kr/title/70275749" target="_blank" class="ott-link">
+                NETFLIX ↗
+            </a>
+            <a href="https://watcha.com/ko/contents/m533YYj" target="_blank" class="ott-link">
+                WATCHA ↗
+            </a>
+            <a href="https://www.wavve.com/player/movie?movieid=MV_CV01_KE0000011163" target="_blank" class="ott-link">
+                WAVVE ↗
+            </a>
+        </div>
+    </section>
+
+    <!-- 푸터 (기존 푸터 위치) -->
+    <footer>
+        ...
 
     <!-- 푸터 -->
     <footer>
